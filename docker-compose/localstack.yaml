@@ -1,0 +1,21 @@
+services:
+  localstack:
+    container_name: localstack
+    build:
+      context: ..
+      dockerfile: aws_deployment/Dockerfile
+    ports:
+      - "443:443"
+      - "4566:4566"
+      - "4510-4559:4510-4559/tcp"
+    environment:
+      - DOCKER_HOST=${DOCKER_HOST}
+      - LOCALSTACK_AUTH_TOKEN=${LOCALSTACK_AUTH_TOKEN}
+      - SERVICES=${SERVICES}
+      - LS_LOG=warn
+    volumes:
+      - ../aws_deployment:/var/lib/localstack/aws_deployment
+      - ../lambdas:/var/lib/localstack/lambdas
+      - ../facade_lib:/var/lib/localstack/facade_lib
+      - ../aws_deployment/scripts:/etc/localstack/init/ready.d
+      - /var/run/docker.sock:/var/run/docker.sock

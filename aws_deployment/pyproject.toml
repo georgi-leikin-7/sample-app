@@ -1,0 +1,21 @@
+[tool.black]
+line-length = 120
+exclude = """
+/(
+    \\.git
+    | \\.venv
+    | venv
+    | __pycache__
+    | cdk\\.out
+)/
+"""
+
+[tool.isort]
+profile = "black"
+skip = [
+    ".git",
+    ".venv",
+    "venv",
+    "__pycache__",
+    "cdk.out",
+]

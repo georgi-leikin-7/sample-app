@@ -1,0 +1,18 @@
+services:
+  nginx:
+    container_name: nginx
+    build:
+      context: ../nginx
+      dockerfile: Dockerfile
+    restart: on-failure
+    mem_limit: 64M
+    environment:
+      - NGINX_PORT=${NGINX_PORT}
+    ports:
+      - "${NGINX_PORT}:${NGINX_PORT}"
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -f http://localhost:$$NGINX_PORT/admin || exit 1",
+        ]
