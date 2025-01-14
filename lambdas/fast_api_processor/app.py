@@ -1,4 +1,3 @@
-import json
 from http import HTTPStatus
 
 from facade_common.enums import FileEndpoints, RootEndpoints
@@ -33,10 +32,3 @@ def handler(event, _context):
         lambda_response: LambdaResponseModel = process_file_request(endpoint=endpoint, body=body)
 
     return lambda_response.model_dump(by_alias=True)
-
-
-if __name__ == "__main__":
-    with open("./download.json", "r") as f:
-        event = json.load(f)
-
-    handler(event=event, _context={})
