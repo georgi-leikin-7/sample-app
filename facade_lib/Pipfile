@@ -4,22 +4,17 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pydantic = "==2.9.2"
-black = "==24.10.0"
-isort = "==5.13.2"
+pydantic = "==2.10.5"
+pydantic-settings = "==2.7.1"
 annotated-types = "==0.7.0"
-click = "==8.1.7"
-mypy-extensions = "==1.0.0"
-packaging = "==24.1"
-pathspec = "==0.12.1"
-platformdirs = "==4.3.6"
-pydantic-core = "==2.23.4"
+pydantic-core = "==2.27.2"
+python-dotenv = "==1.0.1"
 typing-extensions = "==4.12.2"
-loguru = "*"
-boto3 = "*"
-pydantic-settings = "*"
+loguru = "==0.7.3"
 
 [dev-packages]
+black = "*"
+isort = "*"
 
 [requires]
 python_version = "3.11"

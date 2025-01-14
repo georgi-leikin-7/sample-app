@@ -1,6 +1,12 @@
 from uuid import uuid4
 
-from aws_cdk import IgnoreMode, Stack, aws_apigateway, aws_lambda, aws_certificatemanager
+from aws_cdk import (
+    IgnoreMode,
+    Stack,
+    aws_apigateway,
+    aws_certificatemanager,
+    aws_lambda,
+)
 from aws_cdk.aws_lambda import IFunction
 from constructs import Construct
 
@@ -26,7 +32,7 @@ class AwsDeploymentStack(Stack):
                 ),
             )
 
-            if lambda_.setup_api_gateway:
+            if lambda_.setup_api_gateway and lambda_.domain_name:
                 i_function: IFunction = aws_lambda.Function.from_function_arn(
                     scope=self,
                     id=f"{lambda_.name}-function-arn",
@@ -46,7 +52,9 @@ class AwsDeploymentStack(Stack):
                     default_integration=aws_apigateway.LambdaIntegration(handler=i_function),
                 )
 
-                allowed_headers = "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,x-correlation-id"
+                allowed_headers = (
+                    "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,x-correlation-id"
+                )
                 allowed_origins = "*"
                 allowed_methods = "OPTIONS,GET,POST,PUT,DELETE"
 
@@ -82,16 +90,16 @@ class AwsDeploymentStack(Stack):
                 certificate = aws_certificatemanager.Certificate(
                     scope=self,
                     id=f"{lambda_.name}-certificate",
-                    domain_name="api.example.com",
-                    validation=aws_certificatemanager.CertificateValidation.from_dns()
+                    domain_name=lambda_.domain_name,
+                    validation=aws_certificatemanager.CertificateValidation.from_dns(),
                 )
 
                 domain_name = aws_apigateway.DomainName(
                     scope=self,
                     id=f"{lambda_.name}-domain-name",
-                    domain_name="api.example.com",
+                    domain_name=lambda_.domain_name,
                     certificate=certificate,
-                    endpoint_type=aws_apigateway.EndpointType.REGIONAL
+                    endpoint_type=aws_apigateway.EndpointType.REGIONAL,
                 )
 
                 aws_apigateway.BasePathMapping(
@@ -99,5 +107,5 @@ class AwsDeploymentStack(Stack):
                     id=f"{lambda_.name}-path-mapping",
                     domain_name=domain_name,
                     rest_api=rest_api,
-                    stage=rest_api.deployment_stage
+                    stage=rest_api.deployment_stage,
                 )

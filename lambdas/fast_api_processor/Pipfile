@@ -4,12 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-loguru = "==0.7.2"
-facade-lib = {file = "../../facade_lib"}
 
 [dev-packages]
 black = "==24.10.0"
 isort = "==5.13.2"
+facade-lib = {file = "../../facade_lib"}
 
 [requires]
 python_version = "3.11"

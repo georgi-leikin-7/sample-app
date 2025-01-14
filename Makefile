@@ -1,7 +1,7 @@
 DOCKER_COMPOSE_FILES := $(shell find docker-compose -type f -name "*.yaml" | sed -e 's/^/-f /')
 
-$(shell touch .env)
-include .env
+$(shell touch .env .env.dev)
+include .env .env.dev
 export
 
 .PHONY: debug

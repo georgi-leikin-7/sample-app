@@ -1,5 +1,6 @@
 from pydantic import BaseModel, ConfigDict, Field
 from pydantic.alias_generators import to_camel, to_pascal
+from typing_extensions import Optional
 
 
 class InvocationPayloadModel(BaseModel):
@@ -19,11 +20,11 @@ class InvocationRequestModel(BaseModel):
     payload: str
 
 
-class LambdaResponsePayloadModel(BaseModel):
+class LambdaResponseHeadersModel(BaseModel):
 
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(populate_by_name=True)
 
-    message: str
+    content_type: str = Field(alias="Content-Type", default="application/json")
 
 
 class LambdaResponseModel(BaseModel):
@@ -32,5 +33,5 @@ class LambdaResponseModel(BaseModel):
 
     is_base_64_encoded: bool
     status_code: int
-    headers: dict
-    body: str
+    headers: LambdaResponseHeadersModel
+    body: Optional[str] = Field(default=None)

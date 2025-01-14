@@ -6,11 +6,10 @@ from facade_common.models import (
     InvocationPayloadModel,
     InvocationRequestModel,
     LambdaResponseModel,
-    LambdaResponsePayloadModel,
 )
 
 
-def process_request(endpoint: str) -> LambdaResponsePayloadModel:
+def process_root_request(endpoint: str) -> dict:
     logger.info(f"Processing request for '/{endpoint}' endpoint.")
 
     client = boto3.client("lambda")
@@ -31,6 +30,5 @@ def process_request(endpoint: str) -> LambdaResponsePayloadModel:
 
     response_body: str = response_model.body
     response_body_dict: dict = json.loads(response_body)
-    response_body_model: LambdaResponsePayloadModel = LambdaResponsePayloadModel(**response_body_dict)
 
-    return response_body_model
+    return response_body_dict

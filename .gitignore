@@ -173,3 +173,6 @@ cython_debug/
 
 # SAM generated files/direcotries
 .aws-sam/
+
+# DEV
+.env.dev

@@ -1,13 +1,13 @@
 from contextlib import asynccontextmanager
 
-from facade_common.enums import EndpointEnum
+from facade_common.enums import FileEndpoints, RootEndpoints
 from facade_common.logging import init_py_logger
-from facade_common.models import LambdaResponsePayloadModel
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from mangum import Mangum
 
-from utils.request_processor import process_request
+from utils.file_request_processor import process_file_request
+from utils.root_request_processor import process_root_request
 
 
 @asynccontextmanager
@@ -28,8 +28,17 @@ app.add_middleware(
 
 @app.get("/index")
 async def index():
-    response: LambdaResponsePayloadModel = process_request(endpoint=str(EndpointEnum.INDEX))
-    return {"message": f"Called `/{response.message}` endpoint."}
+    return process_root_request(endpoint=str(RootEndpoints.INDEX))
+
+
+@app.post("/upload")
+async def upload_file(request: Request):
+    return process_file_request(endpoint=str(FileEndpoints.UPLOAD))
+
+
+@app.get("/download")
+async def download_file(request: Request):
+    return process_file_request(endpoint=str(FileEndpoints.DOWNLOAD))
 
 
 def handler(event, context):
