@@ -19,7 +19,7 @@ class AwsDeploymentStack(Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        for lambda_ in [FastApiLambda(), FastApiProcessorLambda()]:
+        for lambda_ in self.get_lambdas():
 
             lambda_function = aws_lambda.DockerImageFunction(
                 scope=self,
@@ -109,3 +109,8 @@ class AwsDeploymentStack(Stack):
                     rest_api=rest_api,
                     stage=rest_api.deployment_stage,
                 )
+
+    @staticmethod
+    def get_lambdas() -> list:
+        return [FastApiLambda(), FastApiProcessorLambda()]
+        # return []

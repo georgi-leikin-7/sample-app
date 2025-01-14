@@ -1,6 +1,7 @@
+from typing import Optional
+
 from pydantic import BaseModel, ConfigDict, Field
 from pydantic.alias_generators import to_camel, to_pascal
-from typing_extensions import Optional
 
 
 class InvocationPayloadModel(BaseModel):
@@ -25,6 +26,7 @@ class LambdaResponseHeadersModel(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
     content_type: str = Field(alias="Content-Type", default="application/json")
+    content_disposition: Optional[str] = Field(alias="Content-Disposition", default=None)
 
 
 class LambdaResponseModel(BaseModel):
@@ -33,5 +35,5 @@ class LambdaResponseModel(BaseModel):
 
     is_base_64_encoded: bool
     status_code: int
-    headers: LambdaResponseHeadersModel
+    headers: dict
     body: Optional[str] = Field(default=None)
